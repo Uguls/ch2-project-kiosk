@@ -1,36 +1,44 @@
 package lv3;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Kiosk {
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in); // 사용자 입력을 위한 Scanner 객체 생성
+    List<MenuItem> menuItems; // 메뉴 리스트를 저장할 리스트
 
-    ArrayList<MenuItem> menuItems = new ArrayList<>();
-
-    public Kiosk(ArrayList<MenuItem> menuItem) {
+    public Kiosk(List<MenuItem> menuItem) {
         this.menuItems = menuItem;
     }
 
+    // Kiosk 실행 메서드
     public void start() {
-        while (true) {
-            System.out.println("[ SHAKESHACK MENU ]");
-            for (int i = 0; i < menuItems.size(); i++) {
+        while (true) { // 무한 루프를 사용하여 메뉴를 계속 출력
+            System.out.println("[ SHAKESHACK MENU ]"); // 메뉴 타이틀 출력
+            for (int i = 0; i < menuItems.size(); i++) { // 메뉴 리스트 출력
                 MenuItem menuItem = menuItems.get(i);
-                System.out.println(i + 1 + ". " + menuItem.name + " | W " + menuItem.price + " | " + menuItem.descriptions);
+                System.out.println((i + 1) + ". " + menuItem.name + " | W " + menuItem.price + " | " + menuItem.descriptions);
             }
             System.out.println("0. 종료      | 종료");
-            int menuInput = scanner.nextInt();
 
-            switch (menuInput) {
-                case 0 -> {
-                    System.out.println("프로그램을 종료합니다");
-                    System.exit(0);
+            try {
+                int menuInput = scanner.nextInt(); // 사용자 입력 받기
+
+                switch (menuInput) {
+                    case 0 -> { // 0 입력 시 프로그램 종료
+                        System.out.println("프로그램을 종료합니다");
+                        System.exit(0);
+                    }
+                    case 1, 2, 3, 4 -> { // 사용자가 유효한 메뉴를 선택한 경우
+                        MenuItem selectedItem = menuItems.get(menuInput - 1);
+                        System.out.println(selectedItem.name + " | W " + selectedItem.price + " | " + selectedItem.descriptions);
+                    }
+                    default -> System.out.println("잘못된 입력입니다. 다시 선택해주세요."); // 잘못된 입력 처리
                 }
-                case 1 -> System.out.println("ShackBurger   | W 6.9 | 토마토, 양상추, 쉑소스가 토핑된 치즈버거");
-                case 2 -> System.out.println("SmokeShack    | W 8.9 | 베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거");
-                case 3 -> System.out.println("Cheeseburger  | W 6.9 | 포테이토 번과 비프패티, 치즈가 토핑된 치즈버거");
-                case 4 -> System.out.println("Hamburger     | W 5.4 | 비프패티를 기반으로 야채가 들어간 기본버거");
+            } catch (Exception e) { // 숫자가 아닌 입력이 들어올 경우 예외 처리
+                System.out.println("잘못된 입력입니다. 숫자를 입력해주세요.");
+                scanner.next(); // 잘못된 입력 제거
             }
         }
     }
